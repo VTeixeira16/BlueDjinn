@@ -15,7 +15,7 @@ int main()
     cout << "Bingo executado" << endl;
     initBingoGame();
 
-    cout << "Aplicao encerrada" << endl;
+    cout << "Aplicação encerrada" << endl;
 
     return 0;
 }

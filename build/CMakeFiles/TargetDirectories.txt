@@ -1,3 +1,0 @@
-C:/Users/Victor Teixeira/Desktop/Projetos/BlueDjinn/build/CMakeFiles/BlueDjinn.dir
-C:/Users/Victor Teixeira/Desktop/Projetos/BlueDjinn/build/CMakeFiles/edit_cache.dir
-C:/Users/Victor Teixeira/Desktop/Projetos/BlueDjinn/build/CMakeFiles/rebuild_cache.dir

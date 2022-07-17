@@ -4,7 +4,7 @@ project(BlueDjinn)
 
 set(GAME_TYPE "BINGO" CACHE STRING "Modo de Jogo. BINGO/SLOT/OTHER")
 
-message("GAME_TYPE: ${GAME_TYPE}")
+#message("GAME_TYPE: ${GAME_TYPE}")
 
 if(GAME_TYPE STREQUAL "BINGO")
     add_definitions(-D__GAME_TYPE__=1)
@@ -14,27 +14,30 @@ else()
     add_definitions(-D__GAME_TYPE__=0)
 endif()
 
+string(TOLOWER ${GAME_TYPE} GAME_TYPE_LOWER)
 
-
-
-file(GLOB CORE_SOURCES ${CMAKE_SOURCE_DIR}/core/src/*.c ${CMAKE_SOURCE_DIR}/core/src/*.cpp)
 file(GLOB CORE_HEADERS ${CMAKE_SOURCE_DIR}/core/inc/*.h ${CMAKE_SOURCE_DIR}/core/inc/*.hpp)
+file(GLOB CORE_SOURCES ${CMAKE_SOURCE_DIR}/core/src/*.c ${CMAKE_SOURCE_DIR}/core/src/*.cpp)
 
-file(GLOB GRAPHICS_SOURCES ${CMAKE_SOURCE_DIR}/graphics/src/*.c ${CMAKE_SOURCE_DIR}/graphics/src/*.cpp)
+file(GLOB TYPEGAME_HEADERS ${CMAKE_SOURCE_DIR}/core/inc/${GAME_TYPE_LOWER}/*.h ${CMAKE_SOURCE_DIR}/core/inc/${GAME_TYPE_LOWER}/*.hpp)
+file(GLOB TYPEGAME_SOURCES ${CMAKE_SOURCE_DIR}/core/src/${GAME_TYPE_LOWER}/*.c ${CMAKE_SOURCE_DIR}/core/src/${GAME_TYPE_LOWER}/*.cpp)
+
 file(GLOB GRAPHICS_HEADERS ${CMAKE_SOURCE_DIR}/graphics/inc/*.h ${CMAKE_SOURCE_DIR}/graphics/inc/*.hpp)
+file(GLOB GRAPHICS_SOURCES ${CMAKE_SOURCE_DIR}/graphics/src/*.c ${CMAKE_SOURCE_DIR}/graphics/src/*.cpp)
 
 add_executable(BlueDjinn
                 main.cpp
-                ${CORE_SOURCES}
                 ${CORE_HEADERS}
-                ${GRAPHICS_SOURCES}
+                ${CORE_SOURCES}
+                ${TYPEGAME_HEADERS}
+                ${TYPEGAME_SOURCES}
                 ${GRAPHICS_HEADERS}
+                ${GRAPHICS_SOURCES}
                 #shaders/triangle_vert.glsl
                 #shaders/triangle_frag.glsl
                 )
 
 #set_target_properties(BlueDjinn PROPERTIES LINKER_LANGUAGE CXX)
-
 
 if(WIN32)
     target_include_directories(BlueDjinn PRIVATE #deps/glm
@@ -43,6 +46,7 @@ if(WIN32)
                                                 #deps/glew/include
                                                 core/inc/
                                                 graphics/inc/
+                                                ${CMAKE_SOURCE_DIR}/core/inc/${GAME_TYPE_LOWER}
                                                 )
 
     #target_link_directories(BlueDjinn PRIVATE deps/glfw/lib-mingw-w64
