@@ -33,6 +33,7 @@ add_executable(BlueDjinn
                 ${TYPEGAME_SOURCES}
                 ${GRAPHICS_HEADERS}
                 ${GRAPHICS_SOURCES}
+                deps/glad/src/glad.c
                 #shaders/triangle_vert.glsl
                 #shaders/triangle_frag.glsl
                 )
@@ -40,34 +41,39 @@ add_executable(BlueDjinn
 #set_target_properties(BlueDjinn PROPERTIES LINKER_LANGUAGE CXX)
 
 if(WIN32)
-    target_include_directories(BlueDjinn PRIVATE #deps/glm
-                                                #deps/stb
-                                                #deps/glfw/include
-                                                #deps/glew/include
+    target_include_directories(BlueDjinn PRIVATE deps/glm
+                                                deps/stb
+                                                deps/glfw/include
+                                                deps/glew/include
+                                                deps/glad/include
                                                 core/inc/
                                                 graphics/inc/
                                                 ${CMAKE_SOURCE_DIR}/core/inc/${GAME_TYPE_LOWER}
                                                 )
 
-    #target_link_directories(BlueDjinn PRIVATE deps/glfw/lib-mingw-w64
-    #                                        deps/glew/lib/Release/x64)
+    target_link_directories(BlueDjinn PRIVATE deps/glfw/lib-mingw-w64
+                                            deps/glew/lib/Release/x64
+                                            deps/glad/src)
 
-    #target_link_libraries(BlueDjinn PRIVATE glfw3.lib
-    #                                        glew32.lib
-    #                                        opengl32.lib)
+    target_link_libraries(BlueDjinn PRIVATE glfw3.lib
+                                            glew32.lib
+                                            opengl32.lib)
 
-    #add_custom_command(TARGET BlueDjinn POST_BUILD
-    #                COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/deps/glew/bin/Release/x64/glew32.dll" "${CMAKE_BINARY_DIR}/glew32.dll"
+    add_custom_command(TARGET BlueDjinn POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_SOURCE_DIR}/deps/glew/bin/Release/x64/glew32.dll" "${CMAKE_BINARY_DIR}/glew32.dll"
     #                COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_SOURCE_DIR}/shaders" "${CMAKE_BINARY_DIR}/shaders"
     #                COMMAND ${CMAKE_COMMAND} -E create_symlink "${CMAKE_SOURCE_DIR}/textures" "${CMAKE_BINARY_DIR}/textures"
-#    )
+    )
 else()
     find_package(glfw3 REQUIRED)
     find_package(GLEW REQUIRED)
     find_package(OpenGL REQUIRED)
+    find_package(glad REQUIRED)
+    #TODO - Necessario validar linkagem GLAD no Linux
 
     target_include_directories(BlueDjinn PRIVATE deps/stb deps/glm)
     target_link_libraries(BlueDjinn GLEW::glew
                                      glfw
+                                     glad
                                      OpenGL::OpenGL)
 endif()

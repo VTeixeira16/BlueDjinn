@@ -7,4 +7,4 @@ public:
     Camera();
 };
 
-#endif // CAMERA_H
+#endif // CAMERA_HPP
